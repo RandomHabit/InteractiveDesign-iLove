@@ -25,9 +25,5 @@ public class choiceScript : MonoBehaviour
     {
         UnityEngine.Debug.Log("hey you clicked me");
         GameObject.Find("startDetector").GetComponent<mainScript>().setPicture(cellNumber);
-        GameObject results = GameObject.Find("ResultCanvas");
-        results.SetActive(true);
-        GameObject choicesScr = GameObject.Find("choiceCanvas");
-        choicesScr.SetActive(false);
     }
 }
