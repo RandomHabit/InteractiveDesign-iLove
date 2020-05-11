@@ -16,11 +16,19 @@ public class choiceScript : MonoBehaviour
         butt.onClick.AddListener(madeSelection);
         mine = GetComponent<Image>();
         maxSize = GameObject.Find("startDetector").GetComponent<mainScript>().buttonOptions.Length;
-        cellNumber = Random.Range(0, maxSize);
-        //UnityEngine.Debug.Log(cellNumber);
-        mine.sprite = GameObject.Find("startDetector").GetComponent<mainScript>().buttonOptions[cellNumber];
+        shuffleOptions();
     }
 
+    void OnEnable()
+    {
+        shuffleOptions();
+    }
+
+    void shuffleOptions()
+    {
+        cellNumber = Random.Range(0, maxSize);
+        mine.sprite = GameObject.Find("startDetector").GetComponent<mainScript>().buttonOptions[cellNumber];
+    }
     void madeSelection()
     {
         UnityEngine.Debug.Log("hey you clicked me");

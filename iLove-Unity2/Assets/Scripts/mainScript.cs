@@ -6,7 +6,7 @@ public class mainScript : MonoBehaviour
 {
     public Sprite[] buttonOptions;
     public int todaysPiction;
-    private int todaysAnswer;
+    public string todaysAnswer;
 
     // Start is called before the first frame update
     void Start()
@@ -24,5 +24,10 @@ public class mainScript : MonoBehaviour
     public void setPicture(int chosenCell)
     {
         todaysPiction = chosenCell;
+    }
+
+    public void setAnswer(string userInput)
+    {
+        todaysAnswer = userInput;
     }
 }
