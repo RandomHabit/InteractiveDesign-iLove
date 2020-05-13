@@ -16,6 +16,8 @@ public class choiceScript : MonoBehaviour
         butt.onClick.AddListener(madeSelection);
         mine = GetComponent<Image>();
         maxSize = GameObject.Find("startDetector").GetComponent<mainScript>().buttonOptions.Length;
+        //shuffleQuestion throws an error on "start" but still works so not gonna question it
+        //No errors thrown when runs onEnable, but doesn't shuffle the question on the frist go round if not here
         shuffleOptions();
     }
 
