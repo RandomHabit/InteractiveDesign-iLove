@@ -8,10 +8,12 @@ public class choiceScript : MonoBehaviour
     private int cellNumber;
     private int maxSize = 1;
     private Image mine;
+    private int i;
     Button butt;
     // Start is called before the first frame update
     void Start()
     {
+        i = 0;
         butt = GetComponent<Button>();
         butt.onClick.AddListener(madeSelection);
         mine = GetComponent<Image>();
@@ -23,6 +25,11 @@ public class choiceScript : MonoBehaviour
 
     void OnEnable()
     {
+        //This just makes sure OnEnable and onStart don't try to run at the same time causing an error
+        if (i < 1)
+        {
+            return;
+        }
         shuffleOptions();
     }
 
@@ -30,6 +37,7 @@ public class choiceScript : MonoBehaviour
     {
         cellNumber = Random.Range(0, maxSize);
         mine.sprite = GameObject.Find("startDetector").GetComponent<mainScript>().buttonOptions[cellNumber];
+        i++;
     }
     void madeSelection()
     {

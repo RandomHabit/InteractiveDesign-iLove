@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class questionScript : MonoBehaviour
 {
     private string[] questions;
+    private int i;
     //string userAnswer;
     Button butt;
     // Start is called before the first frame update
@@ -30,22 +31,26 @@ public class questionScript : MonoBehaviour
                "What is your favorite outfit?",
                "When do you feel your best?"
                };
-
+        i = 0;
         butt = GameObject.Find("submitQuestionAnswer").GetComponent<Button>();
         butt.onClick.AddListener(gaveAnswer);
-        //shuffleQuestion throws an error on "start" but still works so not gonna question it
-        //No errors thrown when runs onEnable, but doesn't shuffle the question on the frist go round if not here
+
         shuffleQuestion();
     }
 
     void OnEnable()
     {
+        if (i < 1)
+        {
+            return;
+        }
         shuffleQuestion();
     }
 
     void shuffleQuestion()
     {
         GameObject.Find("questionText").GetComponent<UnityEngine.UI.Text>().text = questions[Random.Range(0, questions.Length)];
+        i++;
     }
 
     public void gaveAnswer()
@@ -57,7 +62,8 @@ public class questionScript : MonoBehaviour
             typed = "come back here";
         }
         GameObject.Find("startDetector").GetComponent<mainScript>().setAnswer(typed);
-        GameObject.Find("QuestionCanvas").SetActive(false);
+        GameObject.Find("QuestionCanvas_D1").SetActive(false);
+        GameObject.Find("QuestionCanvas_D2").SetActive(false);
     }
     // Update is called once per frame
     void Update()
