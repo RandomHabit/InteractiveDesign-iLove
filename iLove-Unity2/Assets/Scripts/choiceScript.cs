@@ -9,10 +9,12 @@ public class choiceScript : MonoBehaviour
     private int maxSize = 1;
     private Image mine;
     private int i;
+    public int pickedFunction;
     Button butt;
     // Start is called before the first frame update
     void Start()
     {
+        
         i = 0;
         butt = GetComponent<Button>();
         butt.onClick.AddListener(madeSelection);
@@ -21,6 +23,7 @@ public class choiceScript : MonoBehaviour
         //shuffleQuestion throws an error on "start" but still works so not gonna question it
         //No errors thrown when runs onEnable, but doesn't shuffle the question on the frist go round if not here
         shuffleOptions();
+        assignFunction();
     }
 
     void OnEnable()
@@ -31,6 +34,7 @@ public class choiceScript : MonoBehaviour
             return;
         }
         shuffleOptions();
+        assignFunction();
     }
 
     void shuffleOptions()
@@ -43,5 +47,37 @@ public class choiceScript : MonoBehaviour
     {
         UnityEngine.Debug.Log("hey you clicked me");
         GameObject.Find("startDetector").GetComponent<mainScript>().setPicture(cellNumber);
+    }
+
+
+    //Change the range based on how many functions we've made
+    void assignFunction()
+    {
+        pickedFunction = Random.Range(0, 0);
+    }
+
+    //Add a case and call your function here
+    public void playCoolFunction()
+    {
+       switch (pickedFunction)
+        {
+            case (0):
+                vibeVibeWee();
+                break;
+
+            case (1):
+                break;
+
+            default:
+                UnityEngine.Debug.Log("Didn't work");
+                break;
+        }
+    }
+
+    //Add your functions below
+
+    void vibeVibeWee()
+    {
+        Handheld.Vibrate();
     }
 }
