@@ -66,6 +66,8 @@ public class choiceScript : MonoBehaviour
                 break;
 
             case (1):
+            //custom vibrations (have to add the vibration script to the button)
+                CustomViber();
                 break;
 
             default:
@@ -79,5 +81,10 @@ public class choiceScript : MonoBehaviour
     void vibeVibeWee()
     {
         Handheld.Vibrate();
+    }
+
+    void CustomViber(){
+        //the parameter is the length of the vibration in milliseconds. Right now its set to 5.5 seconds
+        Vibration.Vibrate(5500);
     }
 }
