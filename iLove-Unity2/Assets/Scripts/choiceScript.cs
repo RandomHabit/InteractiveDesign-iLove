@@ -80,7 +80,7 @@ public class choiceScript : MonoBehaviour
 
     void vibeVibeWee()
     {
-        Handheld.Vibrate();
+        Vibration.Vibrate();
     }
 
     void CustomViber(){
