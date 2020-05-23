@@ -53,7 +53,7 @@ public class choiceScript : MonoBehaviour
     //Change the range based on how many functions we've made
     void assignFunction()
     {
-        pickedFunction = Random.Range(0, 0);
+        pickedFunction = Random.Range(0, 2);
     }
 
     //Add a case and call your function here
