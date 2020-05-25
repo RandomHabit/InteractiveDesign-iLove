@@ -7,6 +7,8 @@ public class choiceScript : MonoBehaviour
 {
     private int cellNumber;
     private int maxSize = 1;
+    private float sizeIncrement = 0.01f;
+    private bool grow = false;
     private Image mine;
     private int i;
     public int pickedFunction;
@@ -14,6 +16,9 @@ public class choiceScript : MonoBehaviour
     private bool moving = false;
     private bool activeButtons = false;
     public Vector2 startPosition;
+
+    private float changeTime = 2.5f;
+    private float timer = 2.5f;
 
     Button butt;
     public GameObject selfie;
@@ -53,6 +58,20 @@ public class choiceScript : MonoBehaviour
             pos.x += 12;
             butt.transform.position = pos;
         }
+
+        if (grow)
+        {
+            timer -= Time.deltaTime;
+            if (timer < 0)
+            {
+                sizeIncrement = sizeIncrement * -1;
+                timer = changeTime;
+            }
+            Vector3 scale = transform.localScale;
+            scale.y += sizeIncrement; 
+            scale.x += sizeIncrement;
+            transform.localScale = scale;
+        }
     }
     void OnEnable()
     {
@@ -86,7 +105,7 @@ public class choiceScript : MonoBehaviour
     //Change the range based on how many functions we've made
     void assignFunction()
     {
-        pickedFunction = Random.Range(0, 6);
+        pickedFunction = Random.Range(0, 7);
     }
 
     //Add a case and call your function here
@@ -118,6 +137,9 @@ public class choiceScript : MonoBehaviour
             case (5):
                 shuffleAllFunctions();
                 break;
+            case (6):
+                StartCoroutine(growUs());
+                break;
 
             default:
                 UnityEngine.Debug.Log("Didn't work");
@@ -142,14 +164,15 @@ public class choiceScript : MonoBehaviour
         Vibration.Vibrate();
     }
 
+
     void CustomViber(){
         changeMessage("buzz buzz buddy");
         //the parameter is the length of the vibration in milliseconds. Right now its set to 5.5 seconds
         Vibration.Vibrate(5500);
     }
 
-    //This one is bugged still. Need to have it not do it to the button that called it
-    //Can't seem to figure out how
+    /// If this one is called and runs on a button that is currently running
+    /// moveUs() than when that button reactivates it will continue moving and never reset
     IEnumerator hideAndSeek()
     {
         changeMessage("It would be a shame if, everything started disappearing");
@@ -171,6 +194,8 @@ public class choiceScript : MonoBehaviour
         }
         changeMessage("Ok that was fun");
     }
+
+
     IEnumerator brokeMe()
     {
         if (activeButtons) { yield break; }
@@ -194,6 +219,8 @@ public class choiceScript : MonoBehaviour
         activeButtons = !activeButtons;
 
     }
+
+
     void shuffleAllFunctions()
     {
         changeMessage("You thought you had me memorized? Well not anymore!");
@@ -203,6 +230,8 @@ public class choiceScript : MonoBehaviour
             b.GetComponent<choiceScript>().shuffleOptions();
         }
     }
+
+
     IEnumerator rotateWee()
     {
         if (rotate) { yield break; }
@@ -218,6 +247,8 @@ public class choiceScript : MonoBehaviour
         }
 
     }
+
+
     IEnumerator moveUs()
     {
         if (moving) { yield break; }
@@ -226,6 +257,15 @@ public class choiceScript : MonoBehaviour
         yield return new WaitForSeconds(5);
         moving = false;
         butt.transform.position = startPosition;
+    }
+
+    IEnumerator growUs()
+    {
+        changeMessage("Not that I'm keeping track or anything");
+        grow = true;
+        yield return new WaitForSeconds(12);
+        grow = false;
+
     }
 
 }
