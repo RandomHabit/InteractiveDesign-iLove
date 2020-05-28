@@ -13,7 +13,8 @@ GameObject:
   - component: {fileID: 2047194997637859512}
   - component: {fileID: 1014982256924586969}
   - component: {fileID: 3803461448877338712}
-  - component: {fileID: 438601786712840801}
+  - component: {fileID: 5151160628248024936}
+  - component: {fileID: 6805772007366063591}
   m_Layer: 5
   m_Name: choiceButton
   m_TagString: butts
@@ -144,8 +145,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pickedFunction: 0
+  startPosition: {x: 0, y: 0}
   selfie: {fileID: 4053276500700265065}
---- !u!50 &438601786712840801
+--- !u!58 &5151160628248024936
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4053276500700265065}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -1.194191, y: 0.42347717}
+  serializedVersion: 2
+  m_Radius: 71.53025
+--- !u!50 &6805772007366063591
 Rigidbody2D:
   serializedVersion: 4
   m_ObjectHideFlags: 0

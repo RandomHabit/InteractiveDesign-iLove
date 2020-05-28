@@ -15,7 +15,14 @@ public class choiceScript : MonoBehaviour
     private bool rotate = false;
     private bool moving = false;
     private bool activeButtons = false;
+    private int horizontalDirection;
+    private int verticalDirection;
     public Vector2 startPosition;
+    private bool ignoreBoundaries = false;
+    private int[] dirs = new int[] { -2, 2 };
+
+
+
 
     private float changeTime = 2.5f;
     private float timer = 2.5f;
@@ -29,20 +36,25 @@ public class choiceScript : MonoBehaviour
         
         i = 0;
         butt = GetComponent<Button>();
-
+        verticalDirection = dirs[Random.Range(0, 2)];
+        horizontalDirection = dirs[Random.Range(0, 2)];
         startPosition = butt.transform.position;
         allButts = GameObject.FindGameObjectsWithTag("butts");
-        butt.onClick.AddListener(madeSelection);
+        //butt.onClick.AddListener(madeSelection);
         mine = GetComponent<Image>();
         maxSize = GameObject.Find("startDetector").GetComponent<mainScript>().buttonOptions.Length;
-        //shuffleQuestion throws an error on "start" but still works so not gonna question it
-        //No errors thrown when runs onEnable, but doesn't shuffle the question on the frist go round if not here
         shuffleOptions();
         assignFunction();
     }
 
     void Update()
     {
+        
+        var floatingAround = butt.transform.position;
+        floatingAround.x += horizontalDirection;
+        floatingAround.y += verticalDirection;
+        butt.transform.position = floatingAround;
+        
         if (rotate)
         {
             butt.transform.Rotate(Vector3.forward * 35.0f * Time.deltaTime);
@@ -96,7 +108,18 @@ public class choiceScript : MonoBehaviour
         GameObject.Find("startDetector").GetComponent<mainScript>().setPicture(cellNumber);
     }
 
-
+    void OnCollisionEnter2D(Collision2D collidedWith)
+    {
+        if (ignoreBoundaries) { return; }
+        else if (collidedWith.gameObject.tag == "horizontalCollider")
+        {
+            horizontalDirection = horizontalDirection * -1;
+        }
+        else if (collidedWith.gameObject.tag == "verticalCollider")
+        {
+            verticalDirection = verticalDirection * -1;
+        }
+    }
 
     void changeMessage(string bill)
     {
