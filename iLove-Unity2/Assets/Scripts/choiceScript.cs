@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Unity.Notifications.Android;
+using UnityEngine.Assertions;
+
 
 public class choiceScript : MonoBehaviour
 {
@@ -14,6 +17,12 @@ public class choiceScript : MonoBehaviour
     public int pickedFunction;
     private bool rotate = false;
     private bool moving = false;
+    
+    private bool countdown = false;
+    private float timeLeft;
+    private float timeToFlash;
+    public Color auraFlashColor;
+
     private bool activeButtons = false;
     private int horizontalDirection;
     private int verticalDirection;
@@ -33,8 +42,17 @@ public class choiceScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
+        var c = new AndroidNotificationChannel()
+        {
+            Id = "channel_id",
+            Name = "Default Channel",
+            Importance = Importance.High,
+            Description = "Generic notifications",
+        };
+        AndroidNotificationCenter.RegisterNotificationChannel(c);
         i = 0;
+        timeToFlash = -1.0f;
         butt = GetComponent<Button>();
         verticalDirection = dirs[Random.Range(0, 2)];
         horizontalDirection = dirs[Random.Range(0, 2)];
@@ -55,6 +73,28 @@ public class choiceScript : MonoBehaviour
         floatingAround.y += verticalDirection;
         butt.transform.position = floatingAround;
         
+        if (countdown)
+        {
+            timeLeft -= Time.deltaTime;
+            changeMessage(timeLeft.ToString("0.00"));
+            if (timeToFlash  < 0)
+            {
+                GameObject.Find("auraObject").GetComponent<Image>().color = auraFlashColor;
+                timeToFlash = 3.0f;
+            }
+            else
+            {
+                timeToFlash -= Time.deltaTime;
+                GameObject.Find("auraObject").GetComponent<Image>().color = Color.Lerp(GameObject.Find("auraObject").GetComponent<Image>().color, Color.clear, 1 * Time.deltaTime);
+            }
+
+
+            if (timeLeft < 0)
+            {
+                countdown = false;
+                playCoolFunction(Random.Range(0, 8));
+            }
+        }
         if (rotate)
         {
             butt.transform.Rotate(Vector3.forward * 35.0f * Time.deltaTime);
@@ -128,15 +168,15 @@ public class choiceScript : MonoBehaviour
     //Change the range based on how many functions we've made
     void assignFunction()
     {
-        pickedFunction = Random.Range(0, 7);
+        pickedFunction = Random.Range(0, 9);
     }
 
     //Add a case and call your function here
-    public void playCoolFunction()
+    public void playCoolFunction(int p)
     {
         //StartCoroutine(waiter());
-
-        switch (pickedFunction)
+        if (p == -1) { p = pickedFunction; }
+        switch (p)
         {
             case (0):
                 //custom vibrations (have to add the vibration script to the button)
@@ -162,6 +202,13 @@ public class choiceScript : MonoBehaviour
                 break;
             case (6):
                 StartCoroutine(growUs());
+                break;
+            case (7):
+                notifyMe();
+                break;
+            case (8):
+                countdown = true;
+                timeLeft = 25f;
                 break;
 
             default:
@@ -271,7 +318,20 @@ public class choiceScript : MonoBehaviour
 
     }
 
+    void notifyMe()
+    {
+        for (int i = 0; i < 3; i++)
+        {
 
+            var notification = new AndroidNotification();
+            notification.Title = "Did you know";
+            notification.Text = "I can annoy you here as well?";
+            notification.FireTime = System.DateTime.Now;
+
+            AndroidNotificationCenter.SendNotification(notification, "channel_id");
+        }
+        changeMessage("I can do this all day");
+    }
     IEnumerator moveUs()
     {
         if (moving) { yield break; }

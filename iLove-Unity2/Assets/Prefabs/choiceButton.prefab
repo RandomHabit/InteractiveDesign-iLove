@@ -123,11 +123,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 3803461448877338712}
         m_MethodName: playCoolFunction
-        m_Mode: 1
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: -1
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -145,6 +145,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pickedFunction: 0
+  auraFlashColor: {r: 1, g: 1, b: 1, a: 0.80784315}
   startPosition: {x: 0, y: 0}
   selfie: {fileID: 4053276500700265065}
 --- !u!58 &5151160628248024936
