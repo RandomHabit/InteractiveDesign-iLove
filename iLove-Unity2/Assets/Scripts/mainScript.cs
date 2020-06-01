@@ -9,10 +9,17 @@ public class mainScript : MonoBehaviour
     public string todaysAnswer;
     public allUserResponses theAnswers;
 
+    private bool Active;
+    private AndroidJavaObject camera1;
+    public bool turnOnLight = false;
+
+
     // Start is called before the first frame update
-    
+
     void Start()
     {
+        GUILayout.BeginArea(new Rect(Screen.width * 0.1f, Screen.height * 0.1f, Screen.width * 0.3f, Screen.height * 0.1f));
+
         theAnswers = new allUserResponses();
         if (PlayerPrefs.HasKey("responses"))
          {
@@ -23,9 +30,17 @@ public class mainScript : MonoBehaviour
         theAnswers.allUserResponsesList.Add(new userResponseEntry(3, "Howard Stern"));
         theAnswers.allUserResponsesList.Add(new userResponseEntry(6, "Spiderman"));
 
+      
 
     }
-    
+    void Update()
+    {
+        /**
+        if (turnOnLight)
+        {
+            FL_Start();
+        }*/
+    }
     public void beamMeUpScotty()
     {
         theAnswers = new allUserResponses();
@@ -75,6 +90,28 @@ public class mainScript : MonoBehaviour
         public allUserResponses()
         {
             allUserResponsesList = new List<userResponseEntry> { };
+        }
+    }
+
+    public void FL_Start()
+    {
+        AndroidJavaClass cameraClass = new AndroidJavaClass("android.hardware.Camera");
+        WebCamDevice[] devices = WebCamTexture.devices;
+        camera1 = cameraClass.CallStatic<AndroidJavaObject>("open", 0);
+
+        if (camera1 != null)
+        {
+            AndroidJavaObject cameraParameters = camera1.Call<AndroidJavaObject>("getParameters");
+            cameraParameters.Call("setFlashMode", "torch");
+            camera1.Call("setParameters", cameraParameters);
+            ///FIX///// 
+            camera1.Call("startPreview");
+            Active = true;
+            turnOnLight = false;
+        }
+        else
+        {
+            Debug.LogError("[CameraParametersAndroid] Camera not available");
         }
     }
 

@@ -23,25 +23,28 @@ public class choiceScript : MonoBehaviour
     private float timeToFlash;
     public Color auraFlashColor;
 
+    public GameObject popCorn;
+
     private bool activeButtons = false;
     private int horizontalDirection;
     private int verticalDirection;
     public Vector2 startPosition;
     private bool ignoreBoundaries = false;
-    private int[] dirs = new int[] { -2, 2 };
+    private int[] dirs = new int[] { -4, 4 };
 
-
-
-
+ 
     private float changeTime = 2.5f;
     private float timer = 2.5f;
 
     Button butt;
     public GameObject selfie;
     GameObject[] allButts;
+
+
     // Start is called before the first frame update
     void Start()
     {
+
 
         var c = new AndroidNotificationChannel()
         {
@@ -100,14 +103,13 @@ public class choiceScript : MonoBehaviour
             butt.transform.Rotate(Vector3.forward * 35.0f * Time.deltaTime);
 
         }
-
         if (moving)
         {
 
             UnityEngine.Debug.Log("supposedly moving");
             ///butt.transform.position += transform.forward* Time.deltaTime* 2.0f;
             var pos = butt.transform.position;
-            pos.x += 12;
+            pos.x += 15;
             butt.transform.position = pos;
         }
 
@@ -168,7 +170,7 @@ public class choiceScript : MonoBehaviour
     //Change the range based on how many functions we've made
     void assignFunction()
     {
-        pickedFunction = Random.Range(0, 9);
+        pickedFunction = Random.Range(0, 11);
     }
 
     //Add a case and call your function here
@@ -195,20 +197,28 @@ public class choiceScript : MonoBehaviour
                 break;
 
             case (4):
-                StartCoroutine(brokeMe());
+                StartCoroutine(growUs());
+           
                 break;
             case (5):
                 shuffleAllFunctions();
                 break;
             case (6):
-                StartCoroutine(growUs());
+                StartCoroutine(brokeMe());
                 break;
             case (7):
                 notifyMe();
                 break;
             case (8):
                 countdown = true;
-                timeLeft = 25f;
+                timeLeft = 10f;
+                break;
+            case (9):
+               StartCoroutine(flashLightHaha());
+               break;
+
+            case (10):
+                StartCoroutine(spawnPopCorn());
                 break;
 
             default:
@@ -236,17 +246,17 @@ public class choiceScript : MonoBehaviour
 
 
     void CustomViber(){
-        changeMessage("buzz buzz buddy");
+        changeMessage("This is what it feels like to get a text incase you forgot.");
         //the parameter is the length of the vibration in milliseconds. Right now its set to 5.5 seconds
-        Vibration.Vibrate(5500);
+        Vibration.Vibrate(4500);
     }
 
     /// If this one is called and runs on a button that is currently running
     /// moveUs() than when that button reactivates it will continue moving and never reset
     IEnumerator hideAndSeek()
     {
-        changeMessage("It would be a shame if, everything started disappearing");
-        int times = Random.Range(1, 6);
+        changeMessage("Why won't you pick one");
+        int times = Random.Range(3, 8);
         for (int i = 0; i < times; i++)
         {
             GameObject billy = allButts[Random.Range(0, allButts.Length)];
@@ -259,13 +269,20 @@ public class choiceScript : MonoBehaviour
             }
             yield return new WaitForSeconds(1);
             billy.SetActive(false);
-            yield return new WaitForSeconds(Random.Range(1,4));
+            yield return new WaitForSeconds(1);
             billy.SetActive(true);
         }
-        changeMessage("Ok that was fun");
+        changeMessage("It took you this long? You literally had one job!");
     }
-
-
+    
+    IEnumerator flashLightHaha()
+    {
+        changeMessage("Turning me off should be easy for you, right?");
+        GameObject.Find("startDetector").GetComponent<mainScript>().FL_Start();
+        yield return new WaitForSeconds(8);
+        //GameObject.Find("startDetector").GetComponent<mainScript>().turnOnLight = false;
+    }
+    
     IEnumerator brokeMe()
     {
         if (activeButtons) { yield break; }
@@ -277,15 +294,15 @@ public class choiceScript : MonoBehaviour
                 b.SetActive(false);
             }
         }
-        changeMessage("Oh look, you broke me. Imagine that.");
+        changeMessage("Great, now look what you did.");
         yield return new WaitForSeconds(1);
-        changeMessage("Hang on I'm rebooting.");
+        changeMessage("Give me a second to fix all of this.");
         yield return new WaitForSeconds(3);
         foreach (GameObject b in allButts)
         {
             b.SetActive(true);
         }
-        changeMessage("Try not to mess it up again");
+        changeMessage("Okay, I saved you. You're welcome.");
         activeButtons = !activeButtons;
 
     }
@@ -293,7 +310,7 @@ public class choiceScript : MonoBehaviour
 
     void shuffleAllFunctions()
     {
-        changeMessage("You thought you had me memorized? Well not anymore!");
+        changeMessage("Good luck trying to understand me with that thick skull.");
         foreach (GameObject b in allButts)
         {
             b.GetComponent<choiceScript>().assignFunction();
@@ -305,7 +322,7 @@ public class choiceScript : MonoBehaviour
     IEnumerator rotateWee()
     {
         if (rotate) { yield break; }
-        changeMessage("Try not to get dizzy");
+        changeMessage("Were you hoping for something else to happen? Too bad.");
         foreach (GameObject b in allButts)
         {
             b.GetComponent<Button>().GetComponent<choiceScript>().rotate = true;
@@ -330,12 +347,12 @@ public class choiceScript : MonoBehaviour
 
             AndroidNotificationCenter.SendNotification(notification, "channel_id");
         }
-        changeMessage("I can do this all day");
+        changeMessage("This is what your phone would do if you had friends.");
     }
     IEnumerator moveUs()
     {
         if (moving) { yield break; }
-       changeMessage("Catch me if you can");
+       changeMessage("I'm not letting you touch me with those fingers");
        moving = true;
         yield return new WaitForSeconds(5);
         moving = false;
@@ -344,11 +361,34 @@ public class choiceScript : MonoBehaviour
 
     IEnumerator growUs()
     {
-        changeMessage("Not that I'm keeping track or anything");
+        changeMessage("It's crazy something as simple as this can keep you entertained.");
         grow = true;
         yield return new WaitForSeconds(12);
         grow = false;
 
+    }
+
+    IEnumerator spawnPopCorn()
+    {
+        changeMessage("You're making me break out with those fingers of yours.");
+        int tots = Random.Range(5, 15);
+        for (int i = 0; i < tots; i++)
+        {
+            float spawnY = Random.Range(-700, 700);
+            float spawnX = Random.Range(-400, 400);
+           /** 
+            float spawnY = Random.Range
+                (Camera.main.ScreenToWorldPoint(new Vector2(0, 0)).y, Camera.main.ScreenToWorldPoint(new Vector2(0, Screen.height)).y);
+            float spawnX = Random.Range
+                (Camera.main.ScreenToWorldPoint(new Vector2(0, 0)).x, Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, 0)).x);
+            */
+            Vector2 spawnPosition = new Vector2(spawnX, spawnY);
+            GameObject billyBob = Instantiate(popCorn, spawnPosition, Quaternion.identity);
+            //billyBob.transform.parent = GameObject.Find("choiceCanvas_D1").transform;
+            billyBob.transform.SetParent(GameObject.Find("choiceCanvas_D1").transform, false);
+            yield return new WaitForSeconds(.5f);
+
+        }
     }
 
 }
